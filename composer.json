@@ -1,0 +1,8 @@
+{
+    "name": "eguibs/projet-php",
+    "require": {
+        "silex/silex": "^2.1",
+        "twig/twig": "1.*",
+        "tinymce/tinymce": "^4.6"
+    }
+}
