@@ -1,0 +1,13 @@
+{% include 'header.html.twig'%}
+
+<article class="container">
+	<div class="row col-md-12">
+		
+		{% for post in posts %}
+		<h2><a href="./article/{{post.getID}}">{{post.getTitle}}</a></h2>
+		<p>{{post.getContent}}</p>
+
+		{% endfor %}	
+</div>
+</article>
+{% include 'footer.html.twig'%}
