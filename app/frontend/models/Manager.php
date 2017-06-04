@@ -1,5 +1,9 @@
 <?php
 
+namespace app\frontend\models;
+use app\frontend\lib\Post;
+
+
 abstract class Manager{
 
 	protected $db;
@@ -20,7 +24,7 @@ abstract class Manager{
 	public function setDB($connection)
 	{
 		try {
-			$this->db = new PDO($connection,"root","");	
+			$this->db = new \PDO($connection,"root","");	
 		} catch (PDOException $e) {
 			echo "ERREUR DE CHARGEMENT DE LA BASE DE DONNEE!!!";
 		}
@@ -28,7 +32,7 @@ abstract class Manager{
 
 	abstract public function addContent(array $content);
 	abstract public function updateContent(UserContent $content);
-	abstract public function getContents();
+	
 
 	public function deleteContent(UserContent $content)
 	{

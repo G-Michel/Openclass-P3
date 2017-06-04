@@ -1,5 +1,8 @@
 <?php
 
+namespace app\frontend\lib;
+
+
 abstract class UserContent{
 
 	protected $ID;

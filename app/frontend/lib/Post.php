@@ -1,5 +1,8 @@
 <?php
 
+namespace app\frontend\lib;
+
+
 class Post extends UserContent{
 
 protected $modificationDate;
@@ -34,8 +37,5 @@ public function setTitle($title)
 	if (isset($title)) 
 		{$this->title = htmlspecialchars($title);}
 }
-
-
-
 
 }

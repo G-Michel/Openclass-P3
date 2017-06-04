@@ -1,6 +1,8 @@
 <?php
 
-class Comments extends UserContent{
+namespace app\frontend\lib;
+
+class Comment extends UserContent{
 
 	protected $idPost;
 
