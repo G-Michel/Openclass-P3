@@ -14,18 +14,21 @@ class PostManager extends Manager{
 			$request = $this->getDB()->prepare("INSERT INTO $this->tableName (title,content,author) VALUES (?,?,?)");
 			$request->execute(array(
 				htmlspecialchars($content["title"]),
-				htmlspecialchars($content["$content"]),
-				htmlspecialchars($content["$author"])));
+				$content["content"],
+				htmlspecialchars($content["author"])));
 		}
 	}
 
-	public function updateContent(UserContent $content)
+	public function updateContent(array $content)
 	{
-			$request = $this->getDB()->prepare("UPDATE $this->tableName SET (title=?,content=?,author=?,modificationDate=NOW())");
+		var_dump($content);
+			$request = $this->getDB()->prepare("UPDATE $this->tableName SET title=?,content=?,author=?,modificationDate=NOW() WHERE ID=".$content["id"]);
+			var_dump($request);
 			$request->execute(array(
-				htmlspecialchars($content->getTitle()),
-				htmlspecialchars($content->getContent()),
-				htmlspecialchars($content->getAuthor())));
+				htmlspecialchars($content["title"]),
+				$content["content"],
+				htmlspecialchars($content["author"])
+				));
 	}
 
 

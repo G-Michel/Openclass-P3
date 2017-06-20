@@ -10,7 +10,7 @@ abstract class UserContent{
 	protected $author;
 	protected $publishDate;
 
-	//constructeur
+	//Constructor
 	public function __construct(array $values)
 	{
 		$this->setID($values["ID"]);
@@ -19,7 +19,7 @@ abstract class UserContent{
 		$this->setPublishDate($values["publishDate"]);
 	}
 
-//Getters 
+	//Getters 
 	public function getID()
 	{
 		return $this->ID;
@@ -41,7 +41,7 @@ abstract class UserContent{
 	public function setContent($content)
 	{
 		if (isset($content)) 
-			{$this->content = htmlspecialchars($content);}
+			{$this->content = $content;}
 	}
 	public function setAuthor($author)
 	{

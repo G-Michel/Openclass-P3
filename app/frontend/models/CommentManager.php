@@ -12,10 +12,24 @@ class CommentManager extends Manager{
 	{
 		if (isset($content))
 		{
-			$request = $this->getDB()->prepare("INSERT INTO $this->tableName (content,author) VALUES (?,?)");
-			$request->execute(array(
-				htmlspecialchars($content["$content"]),
-				htmlspecialchars($content["$author"])));
+			if (isset($content["idNextTo"]) && $content["idNextTo"] != null ) 
+			{
+
+				$request = $this->getDB()->prepare("INSERT INTO $this->tableName (idPost,content,author,idNextTo) VALUES (?,?,?,?)");
+				$request->execute(array(
+					htmlspecialchars($content["idPost"]),
+					htmlspecialchars($content["content"]),
+					htmlspecialchars($content["author"]),
+					htmlspecialchars((int)$content["idNextTo"])));
+			}
+			else
+			{
+				$request = $this->getDB()->prepare("INSERT INTO $this->tableName (idPost,content,author,idNextTo) VALUES (?,?,?,NULL)");
+				$request->execute(array(
+					htmlspecialchars($content["idPost"]),
+					htmlspecialchars($content["content"]),
+					htmlspecialchars($content["author"])));
+			}
 		}
 	}
 
@@ -31,10 +45,10 @@ class CommentManager extends Manager{
 
 	public function getContents($postID)
 	{
-		$request = $this->getDB()->query("SELECT * FROM $this->tableName WHERE idPost = $postID ORDER BY ID DESC LIMIT 20");
+		$request = $this->getDB()->query("SELECT * FROM $this->tableName WHERE idPost = $postID ORDER BY publishDate LIMIT 20");
 		$i=0;
 		while ($reponse = $request->fetch())
-		{
+		{	
 			$object[$i] = new Comment($reponse);
 			$i++;
 		}
@@ -43,4 +57,11 @@ class CommentManager extends Manager{
 		
 	}
 
+	public function getCommNbre($idPost)
+	{
+		$request =  $this->getDB()->query("SELECT COUNT($idPost) as dbcount FROM $this->tableName WHERE idPost=$idPost" );
+		$reponse = $request->fetch();
+		return $reponse["dbcount"];
+
+	}
 }

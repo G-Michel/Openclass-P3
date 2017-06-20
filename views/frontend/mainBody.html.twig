@@ -1,0 +1,26 @@
+{% include '/misc/header.html.twig'%}
+
+<article class="container">
+	<div class="row col-md-offset-1 col-md-10">
+		
+		{% for post in posts %}
+		<h2><a href="./article/{{post.getID}}">{{post.getTitle}}</a></h2>
+		<h5>Publié par {{post.getAuthor()}} le {{post.getPublishDate()}}</h5>
+		{% if post.getPublishDate != post.getModificationDate %}
+			<h5>Modifié le : {{post.getModificationDate}}</h5>
+		{% endif %}<br/>
+		<p>{{post.getContent|raw}}</p>
+		<p>Commentaires : <a href="./article/{{post.getID}}">{{commCount[post.getID]}}</a> <br/>Accéder à 
+		 <a href="./article/{{post.getID}}">l'article</a>
+		</p>
+		{% endfor %}
+		
+
+</div>
+</article>
+
+{% include '/misc/footer.html.twig'%}
+
+
+
+

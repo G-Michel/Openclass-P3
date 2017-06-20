@@ -1,0 +1,21 @@
+{% include '/misc/header.html.twig'%}
+
+<article class="container">
+	<div class="col-md-12">
+		<h1 class="text-warning">Gestion du Profil</h1><br/>
+		<h2>Utilisateur : {{user.getUser()}}</h2>
+		<p>Si vous souhaitez changer le mot de passe </p>
+		<form class="form-group col-md-6" action="./changePass">
+			Veuillez entrer votre mot de passe actuel :
+			<input class="form-control" type="password" name="passwordOld">
+			Votre nouveau mot de passe :
+			<input class="form-control" type="password" name="passwordNew">
+			Veuillez confirmer votre mot de passe
+			<input class="form-control" type="password" name="passwordConfim">
+			<br/>
+			<input class="form-control" type="submit" name="update">
+		</form>
+	</div>
+</article>
+
+{% include '/misc/footer.html.twig'%}

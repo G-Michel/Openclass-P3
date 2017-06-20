@@ -1,0 +1,51 @@
+{% include '/misc/header.html.twig'%}
+
+<article class="container">
+	<div class="col-md-12">
+	<h1 class="text-warning">Interface de Gestion</h1>
+	</div>
+	<div class="col-md-offset-2 col-md-8">
+		<h2>Les articles</h2><br/>
+		<table class="table table-hover table-striped table-bordered text-center">
+    <thead>
+      <tr>
+        <th>Titre</th>
+        <th>auteur</th>
+        <th>Date de publication</th>
+        <th>Date de modification</th>
+        <th>Actions</th>
+
+      </tr>
+    </thead>
+    <tbody>
+    	{% for post in posts%}
+			<tr>
+				<td><p><a href="../article/{{post.getID()}}">{{post.getTitle()}}</a></p></td>
+				<td>{{post.getAuthor()}}</td>
+				<td>{{post.getPublishDate()}}</td>
+				<td>{{post.getModificationDate()}}</td>
+				<td>
+						<form action="./rediger" method="GET" class="form">
+						<input type="hidden" name="id" value="{{post.getID()}}">
+						<input class="btn btn-sm" type="submit" name="submit" value="Modifier">
+						</form>
+
+				</td>
+				<td>
+					<form action="./postHandler" method="POST" class="form">
+      					<input type="hidden" name="route" value="{{route}}">
+						<input type="hidden" name="id" value="{{post.getID()}}">
+						<input class="btn btn-sm" type="submit" name="submit" value="Supprimer">
+					</form>
+				</td>
+				
+			</tr>
+		{% endfor %}
+
+    </tbody>
+  </table>
+
+	</div>
+</article>
+
+{% include '/misc/footer.html.twig'%}

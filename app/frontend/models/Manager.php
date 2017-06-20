@@ -31,12 +31,12 @@ abstract class Manager{
 	}
 
 	abstract public function addContent(array $content);
-	abstract public function updateContent(UserContent $content);
+	//abstract public function updateContent(UserContent $content);
 	
 
-	public function deleteContent(UserContent $content)
+	public function deleteContent($ID)
 	{
-		$this->getDB()->exec("DELETE $this->tableName WHERE ID=". $content->getID());
+		$this->getDB()->exec("DELETE FROM $this->tableName WHERE ID=". $ID);	
 	}
 	public function getContent($ID)
 	{
@@ -45,7 +45,8 @@ abstract class Manager{
 		{
 			$object = new Post($reponse);
 		}
-		return $object;
+		if (isset($object)) return $object;
+		else return null;
 		
 	}
 
