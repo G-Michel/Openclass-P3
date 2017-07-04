@@ -1,15 +1,23 @@
 {% include '/misc/header.html.twig'%}
 
-<article class="container">
-	<div class="row col-md-offset-1 col-md-10 ">
-			
-		<h2 class="text-info">{{post.getTitle}}</h2>
-		<p>{{post.getContent| raw}}</p>
-
+<div class="container">
+	<div class=" col-md-offset-1 col-md-10 col-sm-12">
+		<article class="panel panel-default">
+				<div class="panel-heading">
+					<h2 class="text-info">{{post.getTitle}}</h2>
+					<h6 class="text-right"><strong>Publié</strong> par {{post.getAuthor()}} le {{post.getPublishDate()}}
+					{% if post.getPublishDate != post.getModificationDate %}
+						 <strong>Modifié</strong> le : {{post.getModificationDate}}
+					{% endif %}</h6>
+				</div>
+				<div class="panel-body">
+					<p>{{post.getContent| raw}}</p>
+				</div>
+		</article>
 	</div>
-	<div class="row col-md-offset-2 col-md-6 ">
+	<div class="row col-md-offset-2 col-md-8 col-sm-12 ">
 
-				<h3 class="text-info">Commentaires </h3>
+		<h3 id="commentaires" class="text-info">Commentaires </h3>
 		{% if comments is null %}
 			<p>Aucun Commentaires Soyez le premier à commenter </p>
 		{% else %}
@@ -17,66 +25,82 @@
 
 				{% if comment.getIdNextTo is null %}
 				
-						<div class="panel panel-default"><div class="panel-heading">
-						<h4>commentaire de {{ comment.getAuthor }} </h4>
+						<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="col-md-10">commentaire de {{ comment.getAuthor }} </h4>
+							<p class="text-right">
+								<form action="./report/{{comment.getID}}" method="POST">
+									<input class="btn-link" type="submit" value="signaler">
+									<input  type="hidden" name="route" value="{{route}}">
+								</form>
+							</p>
 						</div>
 						<div class="panel-body">
 						<p>{{ comment.getContent}}</p>
-						<input class="buttonChat btn btn-xs" type="button" name="respond" value="répondre">
+						<input class="buttonChat btn btn-default btn-xs" type="button" name="respond" value="répondre">
 						<form action="../article/comment" class="subForm form-group" method="POST" hidden>
 							<h4 >réponse</h4>
 							<input type="hidden" name="idPost" value="{{post.getID}}">
 							<input type="hidden" name="idNextTo" value="{{comment.getId}}">
 							<input type="hidden" name="route" value="{{route}}">
 							Auteur :
-							{{form.input("text","author") | raw}}
+							<input class="form-control" type="text" name="author" required>
 							Message :
-							{{form.textarea("content")  | raw }}
-							{{form.input("submit","submit") | raw}}
+							<textarea class ="form-control" name="content" rows=4 required></textarea>
+							<input class="btn btn-default" type="submit" name="submit" value="Repondre">
 						</form>
-
 
 						{% for subComment in comments %}
 							<br/>
 
 								{% if comment.getID == subComment.getIdNextTo %}
 								<div class="panel panel-default"><div class="panel-heading">
+									<h4 class="col-md-10">commentaire de {{ subComment.getAuthor }} </h4>
+									<p class="text-right">
+										<form action="./report/{{subComment.getID}}" method="POST">
+											<input class="btn-link" type="submit" value="signaler">
+											<input  type="hidden" name="route" value="{{route}}">
+										</form>
+									</p>
+								</div>
+									<div class="panel-body">
+										<p>{{ subComment.getContent}}</p>
+										<input class="buttonChat btn btn-default btn-xs" type="button" name="respond" value="répondre">
 
-									<h4>commentaire de {{ subComment.getAuthor }} </h4>
-								</div><div class="panel-body">
-									<p>{{ subComment.getContent}}</p>
-									<input class="buttonChat btn btn-xs" type="button" name="respond" value="répondre">
+										<form action="../article/comment" class="subForm form-group" method="POST" hidden>
+											<h3>rédiger un commentaire</h3>
+											<input type="hidden" name="idPost" value="{{post.getID}}">
+											<input type="hidden" name="idNextTo" value="{{subComment.getId}}">
+											<input type="hidden" name="route" value="{{route}}">
+											Auteur :
+											<input class="form-control" type="text" name="author" required>
+											Message :
+											<textarea class ="form-control" name="content" rows=4 required></textarea>
+											<input class="btn btn-default" type="submit" name="submit" value="Repondre">
+										</form>
 
-									<form action="../article/comment" class="subForm form-group" method="POST" hidden>
-										<h3>rédiger un commentaire</h3>
-										<input type="hidden" name="idPost" value="{{post.getID}}">
-										<input type="hidden" name="idNextTo" value="{{subComment.getId}}">
-										<input type="hidden" name="route" value="{{route}}">
-
-										Auteur :
-										{{form.input("text","author") | raw}}
-										Message :
-										{{form.textarea("content")  | raw }}
-										{{form.input("submit","submit") | raw}}
-									</form>
-
-
-											{% for subComment2 in comments %}
-												<br/>
-												{% if subComment.getID == subComment2.getIdNextTo %}
-											    <div class="panel panel-default"><div class="panel-heading">
-
-													<h4>commentaire de {{ subComment2.getAuthor }} </h4>
-												</div><div class="panel-body">
-													<p>{{ subComment2.getContent  }}</p>
-												</div></div>
-												{% endif %}
-											
-											{% endfor %}
-								</div></div>			
-								{% endif %}
-
-							
+										{% for subComment2 in comments %}
+											<br/>
+											{% if subComment.getID == subComment2.getIdNextTo %}
+											    <div class="panel panel-default">
+											    	<div class="panel-heading">
+														<h4 class="col-md-10">commentaire de {{ subComment2.getAuthor }} </h4>
+														<p class="text-right">
+															<form action="./report/{{subComment2.getID}}" method="POST">
+																<input class="btn-link" type="submit" value="signaler">
+																<input  type="hidden" name="route" value="{{route}}">
+															</form>
+														</p>
+													</div>
+													<div class="panel-body">
+														<p>{{subComment2.getContent}}</p>
+													</div>
+												</div>
+											{% endif %}	
+										{% endfor %}
+									</div>
+								</div>			
+								{% endif %}	
 						{% endfor %}
 				</div></div>		
 				{% endif %}	
@@ -89,34 +113,17 @@
 			<h3>rédiger un commentaire</h3>
 			<input type="hidden" name="idPost" value="{{post.getID}}">
 			<input type="hidden" name="route" value="{{route}}">
-
 			Auteur :
-			{{form.input("text","author") | raw}}
+			<input class="form-control" type="text" name="author" required>
 			Message :
-			{{form.textarea("content")  | raw }}
-			{{form.input("submit","submit") | raw}}
+			<textarea class ="form-control" name="content" rows=4 required></textarea>
+			<input class="btn btn-default" type="submit" name="submit" value="Repondre"><br/>
 		</form>
 
 	</div>
-</article>
+</div>
+
 
 {% include '/misc/footer.html.twig'%}
 
 
-<script type="text/javascript">
-		
-		var test;
-		test = document.body.querySelectorAll(".buttonChat");
-		
-		for (i=0; i< test.length;i++)
-		{
-
-		test[i].addEventListener("click", function(e){
-				
-				this.parentNode.querySelectorAll(".subForm")[0].removeAttribute("hidden");
-		});
-		
-		}
-
-
-</script>

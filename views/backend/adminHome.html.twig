@@ -1,21 +1,45 @@
 {% include '/misc/header.html.twig'%}
-
 <article class="container">
 	<div class="col-md-12">
 	<h1 class="text-warning">Interface de Gestion</h1><br/>
-	
-	<aside class="col-md-4 panel panel-primary">
+	<aside class="col-md-4 col-sm-12 panel panel-primary">
 		<div class="panel-heading">
 		<h4>Administration</h4>
 		</div>
 		<ul class="panel-body list-group">
 			<li class="list-group-item"><a href="./rediger">Rédigez un article</a></li>
 			<li class="list-group-item"><a href="./gererArticles">Gérez vos articles</a></li>
+			<li class="list-group-item"><a href="./GererReportComm">Gérer les Commentaires</a></li>
 			<li class="list-group-item"><a href="./gererProfil">Editez votre profil</a></li>
 		</ul>
 	</aside>
+	<article class="col-md-offset-1 col-md-7 col-sm-12 panel panel-primary">
+		<div class="panel-heading">
+		<h4>Les derniers Commentaires reportés :</h4>
+		</div>
+		<ul class="panel-body list-group">
+			{% for comment in comments %}
+				<li class="list-group-item" class="col-md-12">
+					<div class="col-md-10 col-xs-8 text-wrap">
+					<strong>Auteur</strong> :{{comment.getAuthor}}<br/><strong>Commentaire</strong> :{{comment.getContent}}
+					</div>
+					<div class="col-md-2 col-xs-1">
+						<form action="/admin/commHandler" method="POST">
+							<input class="btn btn-xs" type="submit" name="submit" value="Supprimer">
+							<input type="hidden" name="id" value="{{comment.getID()}}">
+							<input type="hidden" name="route" value="/admin/home">
+						</form>
+						<form action="/admin/commEdit" method="GET">
+							<input class="btn btn-xs" type="submit" name="submit" value="Editer">
+							<input type="hidden" name="id" value="{{comment.getID()}}">
+							<input type="hidden" name="route" value="/admin/home">
+						</form>
+					</div>
+				</li><br/><br/><br/>
+			{% endfor %}
+		</ul>
+	</article>
 	</div>
 	</div>
 </article>
-
 {% include '/misc/footer.html.twig'%}

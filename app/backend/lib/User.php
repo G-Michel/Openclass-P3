@@ -3,7 +3,6 @@
 namespace app\backend\lib;
 
 class User{
-
 	private $_id;
 	private $_user;
 	private $_password;
@@ -12,10 +11,9 @@ class User{
 	{
 		$this->setUser($user["user"]);
 		$this->setPassword($user["password"]);
+		$this->setId($user["ID"]);
 	}
-
 	//getter
-
 	public function getUser()
 	{
 		return $this->_user;
@@ -24,12 +22,14 @@ class User{
 	{
 		return $this->_password;
 	}
-
+	public function getId()
+	{
+		return $this->_id;
+	}
 	//SETTERS
 	public function setUser($user){
 		if (isset($user) && is_string($user))
 		{
-		
 			$this->_user = $user;
 		}
 	}
@@ -39,8 +39,10 @@ class User{
 			$this->_password = $password;
 		}
 	}
-
-	
-
-
+	public function setId($id){
+		if (isset($id))
+		{
+			$this->_id=$id;
+		}
+	}
 }

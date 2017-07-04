@@ -1,0 +1,47 @@
+{% include '/misc/header.html.twig'%}
+
+<article class="container">
+	<div class="col-md-12">
+	<h1 class="text-warning">Interface de Gestion</h1>
+	</div>
+	<div class="col-md-offset-2 col-md-8">
+		<h2>Les commentaires reportés</h2><br/>
+		<table class="table table-hover table-striped table-bordered text-center">
+    <thead>
+      <tr>
+        <th>auteur</th>
+        <th>Date de publication</th>
+        <th>Commentaire<th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+    	{% for comment in comments %}
+			<tr>
+				<td>{{comment.getAuthor()}}</td>
+				<td>{{comment.getPublishDate()}}</td>
+				<td>{{comment.getContent()}}</td>
+				<td>
+					<form action="/admin/commEdit" method="GET">
+						<input class="btn btn-xs" type="submit" name="submit" value="Editer">
+						<input type="hidden" name="id" value="{{comment.getID()}}">
+						<input type="hidden" name="route" value="/admin/GererReportComm">
+					</form>
+				</td>
+				<td>
+					<form action="/admin/commHandler" method="POST">
+						<input class="btn btn-xs" type="submit" name="submit" value="Supprimer">
+						<input type="hidden" name="id" value="{{comment.getID()}}">
+						<input type="hidden" name="route" value="/admin/GererReportComm">
+						
+					</form>
+				</td>	
+			</tr>
+		{% endfor %}
+
+    </tbody>
+  </table>
+	</div>
+</article>
+
+{% include '/misc/footer.html.twig'%}

@@ -1,0 +1,48 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Billet simple pour l'Alaska</title>
+  <link rel="stylesheet" type="text/css" href="{{asset('css/theme.css')}}">
+</head>
+<body>
+<div class="container">
+  <header class="col-md-12">
+    
+    <nav class="navbar navbar hidden-sm hidden-xs"> 
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/">Home</a></li>
+        <li ><a href="/contact">Contact</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        {% if status == "connected" %}
+          <li class="text-right"><a href="../login/disconnect">Deconnection</a></li>
+          <li><a href="../admin/home">Administration</a></li>
+        {% else %}
+          <li class="text-right"><a href="../login/connection">Connection</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+    <nav class="navbar navbar-header col-sm-12 hidden-md hidden-lg">
+      <button class="navbar-collapse"></button>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/">Home</a></li>
+        <li ><a href="/contact">Contact</a></li>  
+        {% if status == "connected" %}
+          <li class="text-right"><a href="../login/disconnect">Deconnection</a></li>
+          <li><a href="../admin/home">Administration</a></li>
+        {% else %}
+          <li class="text-right"><a href="../login/connection">Connection</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+    <div class="well">
+      <h1 class="col-md-10" ><a href="/" class="text-info">Billet simple pour l'Alaska</a></h1><br/><br/>
+      <h5 class="text-right">Jean Forteroche</h5>
+    </div>      
+
+  </header>
+</div>
+
+

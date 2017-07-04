@@ -1,16 +1,22 @@
 {% include '/misc/header.html.twig'%}
-
 <article class="container">
 	<h1 class="text-warning">Identifiant</h1>
-	<form class="col-md-offset-3 col-md-6" action="../login/connectionHandler" method="POST">
-		<input type="hidden" name="route" value="">
-		Login:
-		{{form.input("text","user") | raw}}
-		Password:
-		{{form.input("password","password") | raw}}
-		<input type="submit" name="submit">
-
-	</form>
+	<div class="col-md-offset-3 col-md-6 col-sm-12">
+		<div class="panel panel-default ">
+			<div class="panel-heading">
+				<h3>Connection</h3>
+			</div>
+			<div class="panel-body">
+				<form action="../login/connectionHandler" method="POST">
+					<input type="hidden" name="route" value="{{route}}">
+					Login:
+					<input class="form-control" type="text" name="user" placeholder="Pseudo" required>
+					Password:
+					<input class="form-control" type="password" name="password" placeholder="Mot de Passe" required><br/>
+					<input class="btn btn-primary" type="submit" name="submit"><br/><br/>
+				</form>
+			</div>
+		</div>
+	</div>
 </article>
-
 {% include '/misc/footer.html.twig'%}

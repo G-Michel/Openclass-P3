@@ -3,13 +3,22 @@
 namespace app\frontend\lib;
 
  class Form {
-
 	protected $form;
 
 	public function __construct( $presets ="none")
 	{
 
 	}
+
+//essayons de s'imaginer 
+	public static function commentForm()
+	{
+
+
+		
+	}
+
+
 
 	public function buildComment()
 	{

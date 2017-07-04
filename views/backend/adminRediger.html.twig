@@ -1,7 +1,5 @@
 {% include '/misc/header.html.twig'%}
 
-
-
 <article class="container">
 	<div class="col-md-12">
     {% if post is defined %} 
@@ -9,42 +7,44 @@
     {% else %} 
 	       <h1 class="text-warning">Rediger un article</h1>
     {% endif %}
-	</div><br/><br/><br/><br/><br/><br/>
-
-	 <form action="./postHandler" class="form col-md-offset-1 col-md-10" method="post">
-      <input type="hidden" name="author" value="{{author}}">
-      <input type="hidden" name="route" value="{{route}}">
-  	 	<h2>Titre</h2>
-      {% if post is defined %} 
-          <input class="form-control" type="text" name="title" value="{{post.getTitle()}}">
-      {% else %} 
-          {{form.input("text","title") | raw}}
-      {% endif %}
-  	 	<h2>Contenu</h2>
-      {% if post is defined %} 
-         <textarea id="mytextarea" rows="40" name="content">{{post.getContent()}}</textarea>
-      {% else %} 
-        <textarea id="mytextarea" rows="40" name="content">Hello, World!</textarea>
-      {% endif %}
-     	<br/>
-      {% if post is defined %}
-      <input type="hidden" name="id" value="{{post.getID()}}"> 
-      <input class="btn btn-default btn-lg" type="submit" name="submit" value="Modifier"> 
-      {% else %} 
-      <input class="btn btn-default btn-lg" type="submit" name="submit" value="Publier">
-      {% endif %}
-  	</form>
-
+	 </div><br/><br/><br/><br/><br/><br/>
+  <div class="panel panel-default col-md-offset-1 col-md-10 col-sm-12">
+    <div class="panel-body">
+	     <form action="./postHandler" class="form" method="post">
+        <input type="hidden" name="author" value="{{author}}">
+        <input type="hidden" name="route" value="{{route}}">
+    	 	<h2>Titre</h2>
+        {% if post is defined %} 
+            <input required class="form-control" type="text" name="title" value="{{post.getTitle()}}">
+        {% else %} 
+            <input required class="form-control" type="text" name="title" placeholder="Titre">
+        {% endif %}
+    	 	<h2>Contenu</h2>
+        {% if post is defined %} 
+           <textarea id="mytextarea" rows="20" name="content">{{post.getContent()}}</textarea>
+        {% else %} 
+          <textarea id="mytextarea" rows="20" name="content" placeholder="Veuillez entrer votre texte ici"></textarea>
+        {% endif %}
+       	<br/>
+        {% if post is defined %}
+          <input type="hidden" name="id" value="{{post.getID()}}"> 
+          <input class="btn btn-primary btn-lg" type="submit" name="submit" value="Modifier"> 
+        {% else %} 
+          <input class="btn btn-primary btn-lg" type="submit" name="submit" value="Publier">
+        {% endif %}
+    	</form>
+    </div>
+  </div>
 </article>
 
+<script type="text/javascript" src="{{asset("js/tinymce/tinymce.min.js")}}"></script>
+<script type="text/javascript">
+    tinymce.init({
+      selector: '#mytextarea'
+    });
+  </script>
 
 {% include '/misc/footer.html.twig'%}
 
-<script type="text/javascript" src="http://projetphp/js/tinymce/tinymce.min.js"></script>
 
-<script type="text/javascript">
-  tinymce.init({
-    selector: '#mytextarea'
-  });
-  </script>
 

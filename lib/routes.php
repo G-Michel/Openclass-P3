@@ -1,111 +1,80 @@
 <?php
 	
-	use app\frontend\lib\form;
 	use Symfony\Component\HttpFoundation\Request;
 	use app\backend\models\UserManager;
+	use app\SecurityChecker;
+	use app\FormHandler;
 
 
 	// COMMENTS FORM HANDLER
 	$app->post("/article/comment",function () use ($app){
-		return include "commFormHandler.php";
+		SecurityChecker::checkLoginSecurity();
+		return FormHandler::commFormHandler();
 	});
+	// report a comment
+	$app->post("/article/report/{id}",function ($id) use ($app){
+		SecurityChecker::checkLoginSecurity();
+		return FormHandler::commReport($id);
+	});
+	//verrify login !
 	$app->post("/login/connectionHandler",function () use ($app){
-		return include "loginFormHandler.php";
+		return FormHandler::loginFormHandler();
 	});
 
 
-	//Disconnect
-	$app->get("/login/disconnect", function(request $request) use($app) {
-			unset($_SESSION["user"]);
-			unset($_SESSION["password"]);
-			unset($_SESSION["status"]);
-			session_destroy();
-			return $app->redirect("../../");
-	});
-
-	//login route
-	$app->get("/login/connection", function(request $request) use($app){
-		$form = new Form();
-		$route = $request->getPathInfo();
-		// vérrification si l'utilisateur est connecté 
-		if (isset($_SESSION["status"]) && $_SESSION["status"] == "connected")
+	//Connect and Disconnect route
+	$app->get("/login/{login}", function($login , request $request) use($app,$notification){
+		SecurityChecker::checkLoginSecurity();
+		switch($login)
 		{
-		 $userManager = new UserManager("mysql:host=localhost;dbname=projetoc;charset=UTF8");
-		 if ($user = $userManager->getContent($_SESSION["user"]))
-			{
+			case "connection":
+				$route = $request->getPathInfo();
 
-				if ($user->getPassword() != $_SESSION["password"] )
-				{
-					unset($_SESSION["user"]);
-					unset($_SESSION["password"]);
-					$_SESSION["status"]="error";
-					
-				}
-			}
+				SecurityChecker::checkLoginSecurity();
+
+
+				return $app['twig']->render("/misc/login.html.twig",array(
+					"route"=>$route,
+					"notification"=>$notification,
+					"status"=>$_SESSION["status"]
+					));
+			break;
+
+			case "disconnect":
+				unset($_SESSION["user"]);
+				unset($_SESSION["password"]);
+				unset($_SESSION["status"]);
+				$_SESSION["notification"]="Utilisateur déconnecté";
+				return $app->redirect("../../");
+			break;
 		}
-
-		return $app['twig']->render("/misc/login.html.twig",array(
-			"form"=>$form,
-			"route"=>$route,
-			"status"=>$_SESSION["status"]
-			));
-
 	});
 
 	//Articles route
-	$app->get("/article/{id}",function ($id, request $request) use ($app,$commManager,$manager)
+	$app->get("/article/{id}",function ($id, request $request) use ($app,$commManager,$manager,$notification)
 	{
-
-		if (isset($_SESSION["status"]) && $_SESSION["status"] == "connected")
-		{
-		 $userManager = new UserManager("mysql:host=localhost;dbname=projetoc;charset=UTF8");
-		 if ($user = $userManager->getContent($_SESSION["user"]))
-			{
-				if ($user->getPassword()!= $_SESSION["password"])
-				{
-					unset($_SESSION["user"]);
-					unset($_SESSION["password"]);
-					$_SESSION["status"]="error";
-					
-				}
-			}
-		}
-
-
+		SecurityChecker::checkLoginSecurity();
 		if ($post = $manager->getContent($id))
 		{
 			$route = $request->getPathInfo();
 			$comments = $commManager->getContents($id);
-			$form = new Form();	
+
 			return $app['twig']->render("/frontend/post.html.twig",array(
 				'post' => $post,
 				"comments" => $comments,
-				"form" => $form,
+				"notification"=>$notification,
 				"route" => $route,
 				"status"=>$_SESSION["status"]
 				));
 		}
-		else return $app['twig']->render("/misc/erreur404.html.twig");
+		else return $app['twig']->render("/misc/erreur404.html.twig",array(
+			"status"=>$_SESSION["status"]));
 	});
 
 	// MainPage route
-	$app->get("/",function (request $request,$name="") use ($app,$manager,$commManager)
+	$app->get("/",function (request $request,$name="") use ($app,$manager,$commManager,$notification)
 	{
-
-		if (isset($_SESSION["status"]) && $_SESSION["status"] == "connected")
-		{
-		 $userManager = new UserManager("mysql:host=localhost;dbname=projetoc;charset=UTF8");
-		 if ($user = $userManager->getContent($_SESSION["user"]))
-			{
-				if ($user->getPassword()!= $_SESSION["password"])
-				{
-					unset($_SESSION["user"]);
-					unset($_SESSION["password"]);
-					$_SESSION["status"]="error";
-					
-				}
-			}
-		}
+		SecurityChecker::checkLoginSecurity();
 		$route = $request->getPathInfo();
 		$posts = $manager->getContents();
 		$i=0;
@@ -115,31 +84,32 @@
 		return $app['twig']->render("/frontend/mainBody.html.twig",array(
 			'posts' => $posts,
 			 "commCount" => $count,
+			 "notification"=>$notification,
 			 "status"=>$_SESSION["status"],
 			 "route"=>$route
 			 ));
 
 	});
 
-	$app->get("/{name}", function ($name) use ($app){
+	//other routes ROUTES
+	$app->get("/{name}", function ($name) use ($app,$notification){
 
-		if (isset($_SESSION["status"]) && $_SESSION["status"] == "connected")
+		SecurityChecker::checkLoginSecurity();
+
+		switch($name)
 		{
-		 $userManager = new UserManager("mysql:host=localhost;dbname=projetoc;charset=UTF8");
-		if ($user = $userManager->getContent($_SESSION["user"]))
-			{
-				if ($user->getPassword()!= $_SESSION["password"])
-				{
-					unset($_SESSION["user"]);
-					unset($_SESSION["password"]);
-					$_SESSION["status"]="error";
-					
-				}
-			}
+			case "contact":// Contact static page
+				return $app['twig']->render("/frontend/contact.html.twig",array(
+				"notification"=>$notification,
+				"status"=>$_SESSION["status"]
+		 		));
+			break;
+
+			default://mismatch Pages
+				return $app['twig']->render("/misc/erreur404.html.twig",array(
+				"notification"=>$notification,
+				"status"=>$_SESSION["status"]
+		 		));
+		 	break;
 		}
-
-
-		return $app['twig']->render("/misc/erreur404.html.twig",array(
-		 	"status"=>$_SESSION["status"]
-		 	));
 	});

@@ -2,30 +2,40 @@
 <html>
 <head>
 	<title>Billet simple pour l'Alaska</title>
-	<link rel="stylesheet" type="text/css" href="http://projetphp/css/theme.css">
+  <link rel="stylesheet" type="text/css" href="{{asset('css/theme.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('css/aside.css')}}">
 </head>
 <body>
+<div class="navbar" id="notification" hidden>
+<h2>{{notification}}</h2>
+</div>
 <div class="container">
-	<header class="col-md-12">
-		
-		<nav class="navbar navbar">
-			<ul class="nav navbar-nav">
-				<li clas="active"><a href="http://projetphp/">Home</a></li>
-				<li><a href="#">Forum</a></li>
-				<li><a href="#">Contact</a></li>
-			</ul>
-			<ul class="nav navbar-nav navbar-right">
-				{% if status == "connected" %}
-					<li class="text-right"><a href="../login/disconnect">Deconnection</a></li>
-					<li><a href="../admin/home">Administration</a></li>
-				{% else %}
-					<li class="text-right"><a href="../login/connection">Connection</a></li>
-				{% endif %}
-			</ul>
+<nav class="navbar navbar-default navbar-custom">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                    
+      </button>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a href="/">Accueil</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+      	  {% if status == "connected" %}
+            <li ><a href="../login/disconnect">Deconnection</a></li>
+            <li><a href="../admin/home">Administration</a></li>
+          {% else %}
+            <li><a href="../login/connection">Connection</a></li>
+          {% endif %}
+      </ul>
+    </div>
+</nav>
 
-		</nav>
 		<div class="well">
-			<h1 class="col-md-10" ><a href="http://projetphp/" class="text-info">Billet simple pour l'Alaska</a></h1><br/><br/>
+		  <h1 class="col-md-10" ><a href="/" class="text-info">Billet simple pour l'Alaska</a></h1><br/><br/>
 			<h5 class="text-right">Jean Forteroche</h5>
 		</div>			
 
