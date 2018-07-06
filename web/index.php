@@ -20,9 +20,9 @@ if (isset($_SESSION["status"]) == false) $_SESSION["status"]="unconnected";
 $classLoader = new \app\SplClassLoader("app",dirname(__DIR__));
 $classLoader->register();
 
-$manager = new PostManager("mysql:host=localhost;dbname=projetoc;charset=UTF8");
-$commManager = new CommentManager("mysql:host=localhost;dbname=projetoc;charset=UTF8");
-$userManager = new UserManager("mysql:host=localhost;dbname=projetoc;charset=UTF8");
+$manager = new PostManager();
+$commManager = new CommentManager();
+$userManager = new UserManager();
 $app = new Silex\Application();
 $app['debug'] = true;
 

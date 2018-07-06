@@ -41,7 +41,9 @@ abstract class UserContent{
 	public function setContent($content)
 	{
 		if (isset($content)) 
-			{$this->content = $content;}
+			{
+				$this->content = $content;
+			}
 	}
 	public function setAuthor($author)
 	{

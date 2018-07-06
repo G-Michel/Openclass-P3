@@ -32,19 +32,16 @@ class Comment extends UserContent{
 	//setter
 	public function setIdPost($idPost)
 	{
-	
-			$this->idPost = $idPost;
-		
+			if ( isset($idPost) ) $this->idPost = $idPost;
 	}
 	public function setIdNextTo($idNextTo)
 	{
-
-			$this->idNextTo = $idNextTo;
+			if (isset($idNextTo))$this->idNextTo = $idNextTo;
 		
 	}
 	public function setReport($report)
 	{
-		$this->report = $report;
+			if (isset($report))$this->report = $report;
 	}
 
 }

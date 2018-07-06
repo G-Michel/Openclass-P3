@@ -8,12 +8,11 @@ use app\backend\models\UserManager;
 
 class FormHandler{
 
-	const DB_ACCESS = "mysql:host=localhost;dbname=projetoc;charset=UTF8";
-
+	
 // codes that permit report an abusing comment
 public static function commReport($id)
 {	
-	$commManager = new CommentManager(self::DB_ACCESS);
+	$commManager = new CommentManager();
 	$commentary = $commManager->getContent($id);
 	if ($commentary !=null)
 	{
@@ -38,9 +37,9 @@ public static function commReport($id)
 //Password form
 public static function changePass()
 {	
-	$userManager = new UserManager(self::DB_ACCESS);
+	$userManager = new UserManager();
 	$user = $userManager->getContent($_SESSION["user"]);
-	$oldPassword = sha1($_POST["oldPassword"])."blog";
+	$oldPassword = sha1($_POST["oldPassword"]."blog");
 	if ($user !=null && $_POST["newPassword"] == $_POST["passwordComfirm"])
 	{
 		$newPassword = sha1($_POST["newPassword"])."blog";
@@ -72,12 +71,20 @@ public static function changePass()
 //  handles commentaries' upload ,delete , update 
 public static function commFormHandler($admin=false)
 {
-	$commManager = new CommentManager(self::DB_ACCESS);
+	$commManager = new CommentManager();
 	switch($_POST["submit"])
 	{
 	case "Repondre": // add a comment
 
 		if (!isset($_POST["idNextTo"])) $_POST["idNextTo"]=null ;
+		if (!preg_match("#[a-zA-Z0-9]#",$_POST["author"]) && !preg_match("#[a-zA-Z0-9]#",$_POST["content"]) )
+		{
+
+			$_SESSION["notification"]="Message vide";
+			header('Location:' .$_POST["route"]);
+			exit;
+		}
+
 		if (isset($_POST["author"]) && isset($_POST["content"]) )
 		{
 			$commManager->addContent(array(
@@ -106,6 +113,13 @@ public static function commFormHandler($admin=false)
 	}
 	break;
 	case "Editer": // edit a comment
+		if (!preg_match("#[a-zA-Z0-9]#",$_POST["author"]) && !preg_match("#[a-zA-Z0-9]#",$_POST["content"]) )
+		{
+
+			$_SESSION["notification"]="Message vide";
+			header('Location:' .$_POST["route"]);
+			exit;
+		}
 	if($admin==true) // reserved to admin
 	{
 		$commManager->updateContent(array(
@@ -131,7 +145,7 @@ public static function commFormHandler($admin=false)
 // handles Login 
 public static function loginFormHandler()
 {
-	$userManager = new UserManager(self::DB_ACCESS);
+	$userManager = new UserManager();
 	//Check values
 	if (isset($_POST["user"])&& isset($_POST["password"]))
 	{
@@ -175,8 +189,8 @@ public static function loginFormHandler()
 // used to manage Articles
 public static function postFormHandler()
 {
-	$postManager = new PostManager(self::DB_ACCESS);
-	$commManager = new CommentManager(self::DB_ACCESS);
+	$postManager = new PostManager();
+	$commManager = new CommentManager();
 
 	// supprimer
 	if ($_POST["submit"]=="Supprimer")

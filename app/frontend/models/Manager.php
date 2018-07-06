@@ -1,6 +1,8 @@
 <?php
 
 namespace app\frontend\models;
+use app\backend\lib\DbClass;
+
 
 // main class for managers
 abstract class Manager{
@@ -10,9 +12,9 @@ abstract class Manager{
 	protected $className;
 
 // constructor needs myqsl database
-	public function __construct($connection)
+	public function __construct()
 	{
-		$this->setDB($connection);
+		$this->setDB(DbClass::getInstance());
 	}
 	
 	//GETTER 
@@ -23,11 +25,11 @@ abstract class Manager{
 	//SETTER
 	public function setDB($connection)
 	{
-		try {
-			$this->db = new \PDO($connection,"root","");	
-		} catch (PDOException $e) {
-			echo "ERREUR DE CHARGEMENT DE LA BASE DE DONNEE!!!";
-		}
+		if (is_object($connection)) 
+			{	
+				$this->db = $connection->getDBAccess();
+			}
+		else echo "erreur";
 	}
 
 	//abstract method to add content to database !
@@ -58,7 +60,9 @@ abstract class Manager{
 	// get a single content from database with ID
 	public function getContent($ID)
 	{
+
 		$request = $this->getDB()->query("SELECT * FROM $this->tableName WHERE ID=".$ID);
+		if ($request ==null) return null;
 		while ($reponse = $request->fetch())
 		{
 			$object = new $this->className($reponse);

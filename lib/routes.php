@@ -58,6 +58,7 @@
 		{
 			$route = $request->getPathInfo();
 			$comments = $commManager->getContents($id);
+			if ($comments == null) exit;
 
 			return $app['twig']->render("/frontend/post.html.twig",array(
 				'post' => $post,
@@ -68,6 +69,7 @@
 				));
 		}
 		else return $app['twig']->render("/misc/erreur404.html.twig",array(
+			"notification"=>$notification,
 			"status"=>$_SESSION["status"]));
 	});
 

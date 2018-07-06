@@ -7,11 +7,10 @@ use app\backend\lib\User;
 
 class SecurityChecker{
 
-	const DB_ACCESS = "mysql:host=localhost;dbname=projetoc;charset=UTF8";
 
 	public static function checkLoginSecurity()
 	{
-		$userManager = new UserManager(self::DB_ACCESS);
+		$userManager = new UserManager();
 
 		if (isset($_SESSION["status"]) && $_SESSION["status"] == "connected")
 		{
